@@ -14,8 +14,8 @@ TagManager:
   - 
   - 
   - Ground
-  - 
-  - 
+  - Creatures
+  - Level
   - 
   - 
   - 
@@ -40,4 +40,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Creatures
+    uniqueID: 4204233901
+    locked: 0
+  - name: Level
+    uniqueID: 3315821223
     locked: 0
