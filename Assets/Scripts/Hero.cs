@@ -16,12 +16,19 @@ namespace PixelCrew {
         private float directionX;
         private float directionY;
 
+        private SpriteRenderer spriteRenderer;
         private Rigidbody2D rb;
+        private Animator animator;
+        private static readonly int isGround = Animator.StringToHash("is-ground");
+        private static readonly int isRunning = Animator.StringToHash("is-running");
+        private static readonly int verticalVelocity = Animator.StringToHash("vertical-velocity");
 
         private int coins_value = 0;
 
         private void Awake() {
             rb = GetComponent<Rigidbody2D>();
+            animator = GetComponent<Animator>();
+            spriteRenderer = GetComponent<SpriteRenderer>();
         }
 
         public void SetCoin(int value, string type) {
@@ -45,9 +52,18 @@ namespace PixelCrew {
             return _layerCheck.isTouchingLayer;
         }
 
+        private void UpgradeSpriteDirection() {
+            if(directionX > 0) {
+                spriteRenderer.flipX = false;
+            } else if(directionX < 0) {
+                spriteRenderer.flipX = true;
+            }
+        }
+
         private void FixedUpdate() {
             rb.velocity = new Vector2(directionX * speed, rb.velocity.y);
 
+            bool isGrounded = IsGrounded();
             if(directionY > 0) {
                 if(IsGrounded() && rb.velocity.y <= 0) {
                     rb.AddForce(Vector2.up * jumpImpulse, ForceMode2D.Impulse);
@@ -55,6 +71,12 @@ namespace PixelCrew {
             } else if(rb.velocity.y > 0) {
                 rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
             }
+
+            animator.SetBool(isGround, isGrounded);
+            animator.SetFloat(verticalVelocity, rb.velocity.y);
+            animator.SetBool(isRunning, directionX != 0);
+
+            UpgradeSpriteDirection();
         }
 
     }
