@@ -129,9 +129,9 @@ namespace PixelCrew {
                 _allowDoubleJump = true;
             }
 
-            if (isJumpPressing && yVelocity <= _jumpImpulse) {
+            if (isJumpPressing) { //if (isJumpPressing && yVelocity <= _jumpImpulse)
                 yVelocity = CalculateJumpVelocity(yVelocity);
-            } else if (yVelocity > 0) {
+            } else if (yVelocity > 0 && !_inAir) {
                 yVelocity *= 0.5f;
             }
             

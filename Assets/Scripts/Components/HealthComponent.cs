@@ -10,13 +10,15 @@ namespace PixelCrew.Component {
 
         public void ManageHealthPoints(int delta) {
             _health += delta;
+            if(_health <= 0) {
+                _onDie?.Invoke();
+                return;
+            }
             if(delta < 0) {
                 _onDamage?.Invoke();
             }
-            Debug.Log("health: " + _health);
-            if (_health <= 0) {
-                _onDie?.Invoke();
-            }
+            //Debug.Log("health: " + _health);
+            
         }
     }
 }

@@ -6,8 +6,8 @@ namespace PixelCrew {
     public class Coin : MonoBehaviour {
 
         [SerializeField] private int value;
-        [SerializeField] private Hero _hero;
-
+        
+        private Hero _hero;
         private string coin_type;
 
         private void Awake() {
@@ -16,6 +16,10 @@ namespace PixelCrew {
             } else if(value == 10) {
                 coin_type = "gold";
             }
+        }
+
+        private void Start() {
+            _hero = FindObjectOfType<Hero>();
         }
 
         public void AddCoin() {
