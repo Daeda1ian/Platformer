@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using PixelCrew.Component;
+using UnityEditor.Animations;
 
 namespace PixelCrew {
     public class Hero : MonoBehaviour {
@@ -9,6 +10,7 @@ namespace PixelCrew {
         [SerializeField] private float _criticalFallingValue;
         [SerializeField] private float _damageJumpImpulse;
         [SerializeField] private float _interactionRadius;
+        [SerializeField] private int _damage;
         [SerializeField] private LayerMask _interactionLayer;
         [SerializeField] private LayerMask _groundLayer;
         [SerializeField] private LayerCheck _layerCheck;
@@ -17,7 +19,12 @@ namespace PixelCrew {
         [SerializeField] private SpawnComponent _footStepParticles;
         [SerializeField] private SpawnComponent _jumpParticles;
         [SerializeField] private SpawnComponent _fallParticles;
+        [SerializeField] private SpawnComponent _swordEffect;
         [SerializeField] private ParticleSystem _hitParticles;
+        [SerializeField] private CheckCircleOverlap _attackRange;
+
+        [SerializeField] private AnimatorController _armed;
+        [SerializeField] private AnimatorController _unarmed;
 
         private float directionX;
         private float directionY;
@@ -30,11 +37,13 @@ namespace PixelCrew {
         private static readonly int isRunning = Animator.StringToHash("is-running");
         private static readonly int verticalVelocity = Animator.StringToHash("vertical-velocity");
         private static readonly int hit = Animator.StringToHash("hit");
+        private static readonly int attackKey = Animator.StringToHash("attack");
 
         private int coins_value = 0;
         private bool _allowDoubleJump = true;
         private bool _isGrounded;
         private bool _inAir = false;
+        private bool _isArmed = false;
 
         private void Awake() {
             rb = GetComponent<Rigidbody2D>();
@@ -155,6 +164,29 @@ namespace PixelCrew {
                 SpawnFallParticles();
             } else {
                 _inAir = true;
+            }
+        }
+
+        public void ArmHero() {
+            _isArmed = true;
+            animator.runtimeAnimatorController = _armed;
+        }
+
+        public void Attack() {
+            if (!_isArmed) {
+                return;
+            }
+            animator.SetTrigger(attackKey);
+            _swordEffect.Spawn();
+        }
+
+        public void OnAttack() {
+            GameObject[] gos = _attackRange.GetObjectsInRange();
+            foreach(var go in gos) {
+                var healthComponent = go.GetComponent<HealthComponent>();
+                if(healthComponent != null && go.CompareTag("Enemy")) {
+                    healthComponent.ManageHealthPoints(-_damage);
+                }
             }
         }
 

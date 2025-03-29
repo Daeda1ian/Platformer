@@ -31,5 +31,11 @@ namespace PixelCrew {
             }
         }
 
+        public void OnAttackSomething(InputAction.CallbackContext context) {
+            if(context.canceled) {
+                _hero.Attack();
+            }
+        }
+
     }
 }

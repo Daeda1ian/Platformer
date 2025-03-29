@@ -96,27 +96,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _frameRate: 15
-  _loop: 0
-  _sprites:
-  - {fileID: 21300000, guid: 0680a0ea0a2ba2b4dbd61f905e10f48f, type: 3}
-  - {fileID: 21300000, guid: ea8b5bae72d05024ab15fce5437c622f, type: 3}
-  - {fileID: 21300000, guid: b639c7a13ccc44846a2127156a05b190, type: 3}
-  - {fileID: 21300000, guid: 03451165a2f2d3c4f919b84066d8b509, type: 3}
-  - {fileID: 21300000, guid: f1134b74005cc2f4fa1ee775865c4bf3, type: 3}
-  _onComplete:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8906136128491572085}
-        m_MethodName: DestroyObject
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+  _clips:
+  - _name: fall
+    _sprites:
+    - {fileID: 21300000, guid: 0680a0ea0a2ba2b4dbd61f905e10f48f, type: 3}
+    - {fileID: 21300000, guid: ea8b5bae72d05024ab15fce5437c622f, type: 3}
+    - {fileID: 21300000, guid: b639c7a13ccc44846a2127156a05b190, type: 3}
+    - {fileID: 21300000, guid: 03451165a2f2d3c4f919b84066d8b509, type: 3}
+    - {fileID: 21300000, guid: f1134b74005cc2f4fa1ee775865c4bf3, type: 3}
+    _loop: 0
+    _allowNextClip: 0
+    _onComplete:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 8906136128491572085}
+          m_MethodName: DestroyObject
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!114 &8906136128491572085
 MonoBehaviour:
   m_ObjectHideFlags: 0
