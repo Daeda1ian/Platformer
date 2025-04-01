@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using PixelCrew.Component;
+using PixelCrew.Model;
 using UnityEditor.Animations;
 
 namespace PixelCrew {
@@ -39,20 +40,35 @@ namespace PixelCrew {
         private static readonly int hit = Animator.StringToHash("hit");
         private static readonly int attackKey = Animator.StringToHash("attack");
 
-        private int coins_value = 0;
+        //private int coins_value = 0;
         private bool _allowDoubleJump = true;
         private bool _isGrounded;
         private bool _inAir = false;
-        private bool _isArmed = false;
+        //private bool _isArmed = false;
+
+        private GameSession _session;
 
         private void Awake() {
             rb = GetComponent<Rigidbody2D>();
             animator = GetComponent<Animator>();
         }
 
+        private void Start() {
+            _session = FindObjectOfType<GameSession>();
+
+            var health = GetComponent<HealthComponent>();
+            health.SetHealth(_session.Data.Hp);
+
+            UpdateHeroWeapon();
+        }
+
+        public void OnHealthChanged(int currentHealth) {
+            _session.Data.Hp = currentHealth;
+        }
+
         public void SetCoin(int value, string type) {
-            coins_value += value;
-            Debug.Log(type + " coin, total: " + coins_value);
+            _session.Data.Coins += value;
+            Debug.Log(type + " coin, total: " + _session.Data.Coins);
         }
 
         public void SetDirectionX(float direction) {
@@ -98,14 +114,14 @@ namespace PixelCrew {
         public void TakeDamage() {
             animator.SetTrigger(hit);
             rb.velocity = new Vector2(rb.velocity.x, _damageJumpImpulse);
-            if(coins_value > 0) {
+            if(_session.Data.Coins > 0) {
                 SpawnParticleCoins();
             }
         }
 
         public void SpawnParticleCoins() {
-            int numberCoinsToDispose = Mathf.Min(coins_value, 5);
-            coins_value -= numberCoinsToDispose;
+            int numberCoinsToDispose = Mathf.Min(_session.Data.Coins, 5);
+            _session.Data.Coins -= numberCoinsToDispose;
 
             var burst = _hitParticles.emission.GetBurst(0);
             burst.count = numberCoinsToDispose;
@@ -168,12 +184,20 @@ namespace PixelCrew {
         }
 
         public void ArmHero() {
-            _isArmed = true;
-            animator.runtimeAnimatorController = _armed;
+            _session.Data.IsArmed = true;
+            UpdateHeroWeapon();
+        }
+
+        public void UpdateHeroWeapon() {
+            if(_session.Data.IsArmed) {
+                animator.runtimeAnimatorController = _armed;
+            } else {
+                animator.runtimeAnimatorController = _unarmed;
+            }
         }
 
         public void Attack() {
-            if (!_isArmed) {
+            if (!_session.Data.IsArmed) {
                 return;
             }
             animator.SetTrigger(attackKey);
