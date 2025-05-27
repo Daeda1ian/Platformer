@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.PlayerLoop;
+using PixelCrew.Creatures;
 
 namespace PixelCrew {
     public class HeroInputReader : MonoBehaviour {
@@ -21,7 +20,7 @@ namespace PixelCrew {
 
         public void OnSaySomething(InputAction.CallbackContext context) {
             if(context.canceled) {
-                _hero.SaySomething();
+                //_hero.SaySomething();
             }
         }
 

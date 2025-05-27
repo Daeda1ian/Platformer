@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 4167165880741932022}
   m_Layer: 11
   m_Name: Door_closed
-  m_TagString: Untagged
+  m_TagString: Interactable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -194,4 +194,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 357069f7183a27e4981691f378458768, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _sceneName: Scene_1
+  _sceneName: Scene_0

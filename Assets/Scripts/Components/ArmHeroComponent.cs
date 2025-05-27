@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using PixelCrew.Creatures;
 
 namespace PixelCrew.Component {
     public class ArmHeroComponent : MonoBehaviour {
