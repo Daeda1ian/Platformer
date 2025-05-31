@@ -41,9 +41,22 @@ namespace PixelCrew.Creatures {
         }
 
         private IEnumerator AgroToHero() {
+            LookAtHero();
+            MoveMob(Vector2.zero);
             _particles.Spawn("Exclamation");
             yield return new WaitForSeconds(_alarmDelay);
             StartState(GoToHero());
+        }
+
+        private void LookAtHero() {
+            var direction = GetDirectionToTarget();
+            _creature.UpgradeDirection(direction);
+        }
+
+        private Vector2 GetDirectionToTarget() {
+            var direction = _target.transform.position - transform.position;
+            direction.y = 0;
+            return direction.normalized;
         }
 
         private IEnumerator GoToHero() {
@@ -57,6 +70,7 @@ namespace PixelCrew.Creatures {
                 
                 yield return null;
             }
+            MoveMob(Vector2.zero);
             _particles.Spawn("Miss");
             yield return new WaitForSeconds(_missHeroCooldown);
             StartState(_patrol.DoPatrol());
@@ -71,10 +85,10 @@ namespace PixelCrew.Creatures {
         }
 
         private void SetDirectionToTarget() {
-            var direction = _target.transform.position - transform.position;
-            direction.y = 0;
-            _creature.SetDirectionX(direction.normalized.x);
-            _creature.SetDirectionY(direction.normalized.y);
+            var direction = GetDirectionToTarget();
+            MoveMob(direction);
+            //_creature.SetDirectionX(direction.x);
+            //_creature.SetDirectionY(direction.y);
         }
 
         private IEnumerator Patrolling() {
@@ -82,8 +96,7 @@ namespace PixelCrew.Creatures {
         }
 
         private void StartState(IEnumerator coroutine) {
-            _creature.SetDirectionX(0);
-            _creature.SetDirectionY(0);
+            MoveMob(Vector2.zero);
 
             if (_current != null) {
                 StopCoroutine(_current);
@@ -91,9 +104,15 @@ namespace PixelCrew.Creatures {
             _current = StartCoroutine(coroutine);
         }
 
+        private void MoveMob(Vector2 move) {
+            _creature.SetDirectionX(move.x);
+            _creature.SetDirectionY(move.y);
+        }
+
         public void OnDie() {
             _isDead = true;
             _animator.SetBool(isDeadKey, true);
+            MoveMob(Vector2.zero);
 
             if(_current != null) {
                 StopCoroutine(_current);

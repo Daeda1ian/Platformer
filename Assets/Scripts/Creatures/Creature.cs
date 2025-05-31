@@ -53,7 +53,7 @@ namespace PixelCrew.Creatures {
             Animator.SetFloat(verticalVelocity, Rigidbody.velocity.y);
             Animator.SetBool(isRunning, DirectionX != 0);
 
-            UpgradeDirection();
+            UpgradeDirection(new Vector2(DirectionX, DirectionY));
         }
 
         private bool IsGrounded() {
@@ -106,17 +106,17 @@ namespace PixelCrew.Creatures {
             return yVelocity;
         }
 
-        private void UpgradeDirection() {
+        public void UpgradeDirection(Vector2 direction) {
             var multiplier = _invertScale ? -1 : 1;
-            if(DirectionX > 0) {
+            if(direction.x > 0) {
                 transform.localScale = new Vector3(multiplier, 1, 1);
-            } else if(DirectionX < 0) {
+            } else if(direction.x < 0) {
                 transform.localScale = new Vector3(-1 * multiplier, 1, 1);
             }
         }
 
         public virtual void TakeDamage() {
-            Debug.Log("Take Damage: " + gameObject.name);
+            //Debug.Log("Take Damage: " + gameObject.name);
             _isJumping = false;
             Animator.SetTrigger(hit);
             Rigidbody.velocity = new Vector2(Rigidbody.velocity.x, _damageJumpImpulse);

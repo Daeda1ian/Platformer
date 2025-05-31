@@ -8,6 +8,8 @@ namespace PixelCrew {
 
         [SerializeField] private Hero _hero;
 
+        private float _endTime;
+
         public void OnHorizontalMovement(InputAction.CallbackContext context) {
             var direction = context.ReadValue<float>();
             _hero.SetDirectionX(direction);
@@ -33,6 +35,20 @@ namespace PixelCrew {
         public void OnAttackSomething(InputAction.CallbackContext context) {
             if(context.canceled) {
                 _hero.Attack();
+            }
+        }
+
+        public void OnThrow(InputAction.CallbackContext context) {
+            if(context.started) {
+                _endTime = Time.time + 1f;
+            }
+
+            if(context.canceled) {
+                if(_endTime <= Time.time) {
+                    _hero.ThrowQueue();
+                } else {
+                    _hero.Throw();
+                }
             }
         }
 

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 116250458280871743}
   - component: {fileID: 116250458280871742}
+  - component: {fileID: 6974314494707052042}
   - component: {fileID: 116250458280871741}
   - component: {fileID: 116250458280871740}
   - component: {fileID: 116250458280871739}
@@ -86,6 +87,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &6974314494707052042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 116250458280871737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbe615ef7d03b3d42b8ef8eaabe47d35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &116250458280871741
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,6 +167,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _tag: Player
+  _layer:
+    serializedVersion: 2
+    m_Bits: 4294967295
   _action:
     m_PersistentCalls:
       m_Calls:
@@ -170,6 +186,17 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 116250458280871728}
         m_MethodName: DestroyObject
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 6974314494707052042}
+        m_MethodName: SetSword
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

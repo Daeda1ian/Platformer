@@ -2,17 +2,23 @@
 using PixelCrew.Component;
 using PixelCrew.Model;
 using UnityEditor.Animations;
+using PixelCrew.Utils;
+using System.Collections;
 
 namespace PixelCrew.Creatures {
     public class Hero : Creature {
 
         [SerializeField] private float _criticalFallingValue;
         [SerializeField] private float _interactionRadius;
+        [SerializeField] private int _throwQueueValue;
+        [SerializeField] private float _throwQueueCooldown;
         [SerializeField] private LayerMask _interactionLayer;
         [SerializeField] private CheckCircleOverlap _interactionCheck;
         
         [SerializeField] private SpawnComponent _swordEffect;
         [SerializeField] private ParticleSystem _hitParticles;
+
+        [SerializeField] private Cooldown _throwCooldown;
         
         [SerializeField] private AnimatorController _armed;
         [SerializeField] private AnimatorController _unarmed;
@@ -22,6 +28,8 @@ namespace PixelCrew.Creatures {
         private bool _allowDoubleJump = true;
         private bool _inAir = false;
         private GameSession _session;
+
+        private static readonly int ThrowKey = Animator.StringToHash("throw");
 
         protected override void Awake() {
             base.Awake();
@@ -52,6 +60,10 @@ namespace PixelCrew.Creatures {
         public void SetCoin(int value, string type) {
             _session.Data.Coins += value;
             Debug.Log(type + " coin, total: " + _session.Data.Coins);
+        }
+
+        public void AddSword() {
+            _session.Data.Swords++;
         }
 
         public void Interact() {
@@ -95,8 +107,6 @@ namespace PixelCrew.Creatures {
         }
 
         protected override float CalculateYVelocity() {
-            float yVelocity = Rigidbody.velocity.y;
-            bool isJumpPressing = DirectionY > 0;
 
             if(_IsGrounded) {
                 _allowDoubleJump = true;
@@ -140,6 +150,35 @@ namespace PixelCrew.Creatures {
             }
             _swordEffect.Spawn();
             base.Attack();
+        }
+
+        public void OnDoThrow() {
+            _particles.Spawn("Throw");
+        }
+
+        public void Throw() {
+            if(_throwCooldown.IsReady && _session.Data.Swords > 1) {
+                Animator.SetTrigger(ThrowKey);
+                _throwCooldown.Reset();
+                _session.Data.Swords--;
+            }
+        }
+
+        public void ThrowQueue() {
+            if (_throwCooldown.IsReady && _session.Data.Swords > _throwQueueValue) {
+                StartCoroutine(QueueSequence(_throwQueueValue));
+            } else {
+                Throw();
+            }
+        }
+
+        private IEnumerator QueueSequence(int value) {
+            while (value > 0) {
+                Animator.SetTrigger(ThrowKey);
+                value--;
+                _session.Data.Swords--;
+                yield return new WaitForSeconds(_throwQueueCooldown);
+            }
         }
     }
 }

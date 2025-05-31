@@ -15,6 +15,12 @@ namespace PixelCrew.Model {
             }
         }
 
+        private void Start() {
+            if (_data.Swords <= 0 && _data.IsArmed) {
+                _data.Swords = 1;
+            }
+        }
+
         private bool IsSessionExist() {
             var sessions = FindObjectsOfType<GameSession>();
             foreach(var gameSession in sessions) {
